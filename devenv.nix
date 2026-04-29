@@ -49,11 +49,11 @@
 
   # https://devenv.sh/basics/
   enterShell = ''
+    echo "========================================="
     hello         # Run scripts directly
     git --version # Use packages
-    echo "========================================="
-    echo "佳明地图自制工程环境已启动！"
-    echo "包含工具: mkgmap, splitter, phyghtmap, osmium"
+    echo "Garmin Map Development Environment Active!"
+    echo "Tools included: mkgmap, splitter, pyhgtmap, osmium"
     echo "========================================="
   '';
 
