@@ -1,0 +1,29 @@
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+# Build artifacts
+build_temp/
+output/
+src/contours_cache/
+
+# Raw Data (PBF, HGT, ZIP)
+src/geofabrik/*.pbf
+src/viewfinderpanoramas/**/*.hgt
+src/viewfinderpanoramas/**/*.zip
+hgt
+
+# Environment
+.venv/
+__pycache__/
+*.log
+
+# Style extraction temp files
+my_style/default/styles/
