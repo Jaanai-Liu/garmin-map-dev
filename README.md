@@ -1,14 +1,34 @@
 # Garmin Maps (China Regions)
 
+🔗 **项目开源地址:** [https://github.com/Jaanai-Liu/garmin-map-dev](https://github.com/Jaanai-Liu/garmin-map-dev)
+
 ## 项目概述
 
 本项目旨在解决佳明（Garmin）户外手表（如 Fenix 系列）加载全国详图时出现的卡顿问题。通过使用 OpenStreetMap (OSM) 开源路网数据与高精度高程数据（HGT），将中国大陆划分为多个大区进行独立编译。
+
+> **⚠️ 注意：**
+> 本仓库仅包含 NixOS 环境下的自动化构建脚本与样式配置，**不包含**最终编译好的 `.img` 地图实体文件。你可以克隆本仓库，在本地一键编译出属于你的纯净版地图。
 
 **核心优势：**
 
 - **区域解耦**：按大区生成 `.img` 镜像，用户可按需加载，显著降低手表芯片的渲染压力和内存占用。
 - **性能优化**：通过自定义样式表（Style）过滤了大量建筑物多边形（Polygons），在保留核心导航信息的同时提升地图缩放流畅度。
 - **高程集成**：内置 20 米精度的等高线数据。
+
+## 数据来源 (Data Sources)
+
+本项目的自动化编译依赖于以下两大开源地理数据源。路网数据可通过脚本自动拉取，高程数据需按需手动下载：
+
+### 1. 路网与基础地物数据 (OSM PBF)
+
+- **来源**: [Geofabrik (OpenStreetMap 免费镜像站)](https://download.geofabrik.de/asia/china.html)
+- **说明**: Geofabrik 每天都会打包最新的全球 OSM 数据。本项目内置的 `download_data.sh` 脚本默认会全自动从该网站拉取中国各省份的最新 `.osm.pbf` 文件。
+
+### 2. 高程与等高线数据 (DEM HGT)
+
+- **来源**: [Viewfinder Panoramas (3" 分辨率)](http://viewfinderpanoramas.org/Coverage%20map%20viewfinderpanoramas_org3.htm)
+- **说明**: 该网站提供全球极其精准的数字高程模型（DEM）。
+- **操作须知**: 请在网页地图上点击你需要的中国区域方块（如 `J47`、`I48` 等），下载压缩包并解压出 `.hgt` 文件，然后将这些文件放入本项目的 `src/viewfinderpanoramas/` 目录下。`build_map.sh` 脚本会自动扫描它们并生成 20 米精度的等高线。
 
 ## 省份分组
 
