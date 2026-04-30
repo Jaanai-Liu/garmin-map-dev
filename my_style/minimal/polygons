@@ -1,0 +1,19 @@
+# Trail running / hiking polygons — water bodies and forests only
+# No buildings, no landuse, no leisure, no amenities — minimal CPU load
+
+include 'inc/name';
+
+# Water bodies (essential for outdoor navigation)
+landuse=reservoir | (natural=water & water=reservoir) [0x3f resolution 20]
+natural=water & water=canal [0x48 resolution 22]
+natural=water & area_size() < 100000 [0x41 resolution 22]  # Small Lake
+natural=water [0x3c resolution 18]
+natural=sea {add mkgmap:skipSizeFilter=true; set mkgmap:drawLevel=2} [0x32 resolution 10]
+waterway=riverbank [0x46 resolution 20]
+
+# Forest outline (useful for outdoor reference)
+landuse=forest | landuse=wood [0x50 resolution 20]
+natural=wood [0x50 resolution 20]
+
+<finalize>
+name=* {name '${name}'}

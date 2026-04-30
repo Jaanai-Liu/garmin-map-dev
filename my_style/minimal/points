@@ -1,0 +1,112 @@
+# Minimal points style for Garmin watches
+# Only essential POIs: cities/towns, peaks, transport hubs, water features
+
+addr:housenumber=* {set mkgmap:execute_finalize_rules=true}
+
+# impose routing/speed restrictions due to access/barrier
+vehicle=* {
+    add bicycle='${vehicle}';
+    add motor_vehicle='${vehicle}';
+    }
+motor_vehicle=* {
+    add motorcar='${motor_vehicle}';
+    add goods='${motor_vehicle}';
+    add hgv='${motor_vehicle}';
+    add psv='${motor_vehicle}';
+    add emergency='${motor_vehicle}';
+    }
+psv=* {
+    add taxi='${psv}';
+    add bus='${psv}';
+    }
+
+barrier=* & bicycle=*   {set mkgmap:bicycle  =  '${bicycle|subst:private=>no}'}
+barrier=* & foot=*      {set mkgmap:foot     =     '${foot|subst:private=>no}'}
+barrier=* & hgv=*       {set mkgmap:truck    =      '${hgv|subst:private=>no}'}
+barrier=* & motorcar=*  {set mkgmap:car      = '${motorcar|subst:private=>no}'}
+barrier=* & bus=*       {set mkgmap:bus      =      '${bus|subst:private=>no}'}
+barrier=* & taxi=*      {set mkgmap:taxi     =     '${taxi|subst:private=>no}'}
+barrier=* & emergency=* {set mkgmap:emergency='${emergency|subst:private=>no}'}
+barrier=* & goods=*     {set mkgmap:delivery =    '${goods|subst:private=>no}'}
+
+barrier=bollard | barrier=block {
+    add mkgmap:car=no;
+    add mkgmap:delivery=no;
+    add mkgmap:truck=no;
+    add mkgmap:bus=no;
+    add mkgmap:taxi=no;
+    add mkgmap:emergency=no;
+    }
+barrier=cycle_barrier | barrier=kissing_gate | barrier=stile {
+    add mkgmap:bicycle=no;
+    add mkgmap:car=no;
+    add mkgmap:delivery=no;
+    add mkgmap:truck=no;
+    add mkgmap:bus=no;
+    add mkgmap:taxi=no;
+    add mkgmap:emergency=no;
+    set mkgmap:road-speed=0;
+    }
+barrier=bus_trap {
+    add mkgmap:car=no;
+    add mkgmap:delivery=no;
+    add mkgmap:truck=no;
+    add mkgmap:taxi=no;
+    }
+barrier=gate | barrier=lift_gate | barrier=swing_gate {
+    set mkgmap:road-speed=0;
+    }
+barrier=* {add mkgmap:road-speed=1}
+barrier=* & access=* {addaccess '${access|subst:private=>no}'}
+
+include 'inc/name';
+
+# Cities and towns (for navigation reference)
+place=city & population > 999999 & name=* [0x0100 resolution 12]
+place=city & population > 799999 & name=* [0x0200 resolution 14]
+place=city & population > 399999 & name=* [0x0300 resolution 15]
+place=city & population > 299999 & name=* [0x0400 resolution 16]
+place=city & population > 199999 & name=* [0x0500 resolution 16]
+place=city & population >  99999 & name=* [0x0600 resolution 17]
+place=city & population >  49999 & name=* [0x0700 resolution 17]
+place=city & population >   9999 & name=* [0x0800 resolution 18]
+
+place=city & population >      0 & name=* [0x0800 resolution 18]
+place=city                       & name=* [0x0700 resolution 18]
+
+place=town & population >  69999 & name=* [0x0600 resolution 17]
+place=town & population >  19999 & name=* [0x0700 resolution 18]
+place=town & population >   9999 & name=* [0x0800 resolution 19]
+place=town & population >   4999 & name=* [0x0900 resolution 19]
+place=town & population >    999 & name=* [0x0a00 resolution 19]
+place=town & population >      0 & name=* [0x0b00 resolution 20]
+place=town                       & name=* [0x0800 resolution 19]
+
+place=village                    & name=* [0x0900 resolution 22]
+place=suburb                     & name=* [0x0a00 resolution 22]
+place=hamlet                     & name=* [0x0b00 resolution 24]
+
+# Islands
+place=island & name=* [0x650c resolution 20]
+place=islet  & name=* [0x650c resolution 22]
+
+# Transport hubs
+aeroway=airport [0x2f04 resolution 22]
+aeroway=aerodrome [0x2f04 resolution 22]
+aeroway=helipad [0x5904 resolution 23]
+
+railway=station [0x2f08 resolution 22]
+railway=halt [0x2f08 resolution 23]
+highway=bus_stop | railway=tram_stop [0x2f17 resolution 24]
+
+# Natural features (peaks, for outdoor/hiking)
+natural=peak {name '${name|def:}${ele|height:m=>ft|def:}'} [0x6616 resolution 24]
+natural=volcano [0x2c0c resolution 24]
+natural=spring [0x6511 resolution 24]
+natural=cave_entrance [0x6601 resolution 24]
+
+# Water POIs
+natural=waterfall | waterway=waterfall [0x6508 resolution 24]
+
+<finalize>
+name=* {name '${name}'}

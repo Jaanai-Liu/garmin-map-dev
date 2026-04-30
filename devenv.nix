@@ -19,19 +19,20 @@
     coreutils
     wget
     expat
+    jdk21
 
     qmapshack
+    gpxsee
   ];
 
   env.LD_LIBRARY_PATH = lib.makeLibraryPath (with pkgs; [ expat ]);
 
   languages.python = {
     enable = true;
-    venv.enable = true;
-    venv.requirements = ''
-      pyhgtmap
-    '';
   };
+
+  # pyhgtmap is not in nixpkgs, so we manage it via a local venv
+  env.VENV_PATH = "$DEVENV_ROOT/.venv";
 
   # https://devenv.sh/languages/
   # languages.rust.enable = true;
@@ -49,9 +50,19 @@
 
   # https://devenv.sh/basics/
   enterShell = ''
+    # Setup Python virtual environment with pyhgtmap
+    if [ ! -d "$VENV_PATH" ]; then
+      echo ">>> Creating Python venv with pyhgtmap..."
+      python -m venv "$VENV_PATH"
+      source "$VENV_PATH/bin/activate"
+      pip install pyhgtmap
+    else
+      source "$VENV_PATH/bin/activate"
+    fi
+
     echo "========================================="
-    hello         # Run scripts directly
-    git --version # Use packages
+    hello
+    git --version
     echo "Garmin Map Development Environment Active!"
     echo "Tools included: mkgmap, splitter, pyhgtmap, osmium"
     echo "========================================="

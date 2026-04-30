@@ -10,12 +10,12 @@ echo "========================================="
 # --- USER CONFIGURATION START ---
 # Add or remove province names based on Geofabrik's naming convention
 PROVINCES=(
-    "anhui" "chongqing" "fujian" "gansu" "guangdong"
+    "anhui" "beijing" "chongqing" "fujian" "gansu" "guangdong"
     "guangxi" "guizhou" "hainan" "hebei" "heilongjiang"
     "henan" "hubei" "hunan" "inner-mongolia" "jiangsu"
     "jiangxi" "jilin" "liaoning" "ningxia" "qinghai"
     "shaanxi" "shandong" "shanghai" "shanxi" "sichuan"
-    "tibet" "xinjiang" "yunnan" "zhejiang"
+    "tianjin" "tibet" "xinjiang" "yunnan" "zhejiang"
 )
 # --- USER CONFIGURATION END ---
 
