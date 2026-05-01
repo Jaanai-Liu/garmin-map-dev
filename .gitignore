@@ -12,6 +12,7 @@ devenv.local.yaml
 # Build artifacts
 build_temp/
 output/
+.claude/
 src/contours_cache/
 
 # Raw Data (PBF, HGT, ZIP)
@@ -24,6 +25,9 @@ hgt
 .venv/
 __pycache__/
 *.log
+
+# Release artifacts
+*.tar.gz
 
 # Style extraction temp files
 my_style/default/styles/
