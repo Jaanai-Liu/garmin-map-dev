@@ -40,7 +40,8 @@
 | **China_East**      | 上海、江苏、浙江、安徽             |
 | **China_South**     | 广东、广西、福建                   |
 | **China_Southwest** | 四川、云南、贵州、重庆             |
-| **China_Northwest** | 新疆、西藏、青海、甘肃、宁夏、陕西 |
+| **China_Northwest** | 西藏、青海、甘肃、宁夏、陕西 |
+| **China_Xinjiang**  | 新疆                             |
 | **China_Central**   | 湖北、湖南、江西                   |
 | **China_North**     | 内蒙古、北京、天津                 |
 | **China_Northeast** | 黑龙江、吉林、辽宁、海南           |
@@ -84,7 +85,49 @@
 
 ### 4. 导入手表
 
-编译完成后，进入 `output/` 下对应的批次文件夹，将生成的 `.img` 文件拷贝至佳明手表的 `/Garmin` 目录下即可。
+编译完成后，进入 `output/` 下对应的批次文件夹，将生成的 `.img` 文件拷贝至佳明手表的 `Internal Storage/GARMIN/` 目录下。Fenix 7 系列总容量约 **16GB**，每张地图约 300MB~1GB，可按需选择加载。
+
+#### Windows / macOS
+
+手表通过 USB 连接电脑后，会以 U 盘形式自动挂载。直接将 `.img` 文件拖入 `Garmin` 文件夹即可。
+
+#### Linux
+
+Garmin 手表走 MTP 协议，不会自动挂载为磁盘，需手动操作。
+
+**1. 连接手表，确认识别：**
+
+```bash
+lsusb | grep -i garmin
+# Bus 001 Device 011: ID 091e:4f42 Garmin International
+```
+
+**2. 通过 gio 挂载：**
+
+```bash
+# 查看设备 activation_root
+gio mount -l -i | grep -A 5 "091e"
+
+# 挂载（替换为实际路径）
+gio mount "mtp://091e_4f42_0000d838bc27/"
+```
+
+**3. 复制地图：**
+
+```bash
+gio copy China_Southwest.img "mtp://091e_4f42_0000d838bc27/Internal Storage/GARMIN/"
+```
+
+> 注意：Linux 下 MTP 不支持直接用 `cp`，必须用 `gio copy`。
+
+**4. 验证并卸载：**
+
+```bash
+ls -lh "mtp://091e_4f42_0000d838bc27/Internal Storage/GARMIN/"China*.img
+gio mount -u "mtp://091e_4f42_0000d838bc27/"
+```
+
+**5. 拔线，重启手表**，进入地图菜单即能看到新地图。
 
 ---
 
